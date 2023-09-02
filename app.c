@@ -10,15 +10,57 @@
 int main() {
     /* For initialization Drivers like (LED - KEYBAD - LCD - DC_Motor) */
     initialization (); 
-    /* first message */
+    /* check if we set a new password or not*/
+    eeeprom_Read (0x04,&valid_pass);
+    /* if we didn't set a new password or use factory reset we use the default password*/
+    if(valid_pass != 0x01){
+    eeeprom_Write (0x00,(uint8)Defualt_Password);
+    eeeprom_Write (0x01,(uint8)(Defualt_Password>>8));
+    eeeprom_Write (0x02,(uint8)(Defualt_Password>>16));
+    }
+    
     lcd_4bit_send_string_pos(&lcd, 2, 1, "Enter Your Password:");
     
     while(1)
     {
         /* Read Keypad value */
         keypad_value = Keypad_Read_Value();
-        /* Check for valid Pass the password */
-        if(('0' <= keypad_value) && ('9' >= keypad_value))
+        /* Check for valid password */
+        /* if key = 1 thats mean we need to set a new password*/
+        if( (Key == 1) ){
+            lcd_4bit_send_string_pos(&lcd, 2, 1, "Enter New Password:");
+        }
+        if(('0' <= keypad_value) && ('9' >= keypad_value) && (Key == 1) )
+        {
+            Numb_Of_Pass2++;
+             /* Store the password */
+            New_Password = (New_Password * 10) + (keypad_value - '0');
+            lcd_4bit_send_char_data_pos(&lcd, 3, ++lcd_output_data_col, keypad_value);
+            __delay_ms(200);
+            lcd_4bit_send_char_data_pos(&lcd, 3, lcd_output_data_col, '*');
+        }
+        if(6 == Numb_Of_Pass2)
+        {
+            /* Store New Password in EEPROM*/
+            eeeprom_Write (0x00,(uint8)New_Password);
+            eeeprom_Write (0x01,(uint8)(New_Password>>8));
+            eeeprom_Write (0x02,(uint8)(New_Password>>16));
+            /* Tell The Program We Set A New Password */
+            eeeprom_Write (0x04,0x01);
+            Numb_Of_Pass2 = 0;
+            lcd_output_data_col = 0;
+            lcd_4bit_send_string_pos(&lcd, 2, 1, "New Password is set");
+            __delay_ms(200);
+            lcd_4bit_send_command(&lcd, LCD_CLEAR);
+            __delay_ms(10);
+            lcd_4bit_send_string_pos(&lcd, 2, 1, "Enter Your Password:");
+            Key = 0;
+            keypad_value = Keypad_Read_Value();
+        }
+        else{ /* Nothing */ 
+        }
+        /* if key = 0 thats mean we don't need to set a new password*/
+        if(('0' <= keypad_value) && ('9' >= keypad_value)&& (Key == 0))
         {
            Numb_Of_Pass++;
             /* Store the password */
@@ -30,11 +72,16 @@ int main() {
         /* check if the user entered (6) digit number (Maximum number of password) */
         if(6 == Numb_Of_Pass)
         {
+            /* Read The Password From EEPROM  */
+            eeeprom_Read (0x00,&temp0);
+            eeeprom_Read (0x01,&temp1);
+            eeeprom_Read (0x02,&temp2);
+            Stored_Password = temp0 + temp1*256 + temp2*65536;
             Numb_Of_Pass = 0;
             lcd_output_data_col = 0;
             
             /* Turn on the Green led and open the door (Moving DC Motor) if the password is valid */
-            if(Entered_Password == Password)
+            if(Entered_Password == Stored_Password)
             {
                 led_on(&led_Green);                // Turn on the Green led
                 dc_motor_forward(&DC_Motor);       // open the door (Moving DC Motor)
@@ -46,8 +93,17 @@ int main() {
                 led_off(&led_Green);
                 dc_motor_off(&DC_Motor);
                 lcd_4bit_send_command(&lcd, LCD_CLEAR);
-                __delay_ms(10);
+                lcd_4bit_send_string_pos(&lcd , 1, 1, "(1) Change The Pass"); 
+                lcd_4bit_send_string_pos(&lcd , 3, 1, "Any Key To Exit"); 
+                while(keypad_newvalue == 0){
+                    keypad_newvalue = Keypad_Read_Value();
+                    if (keypad_newvalue == '1'){Key = 1;}
+                    else{ Key = 0;}
+                }
+                lcd_4bit_send_command(&lcd, LCD_CLEAR);
+                __delay_ms(250);
                 lcd_4bit_send_string_pos(&lcd, 2, 1, "Enter Your Password:");
+                keypad_newvalue = 0;
             }
             /* If the password is invalid, Turn on the Red led */
             else
@@ -87,7 +143,6 @@ int main() {
             }
             Entered_Password = 0;
         }
-        
         else{ /* Nothing */ }        
     }
     return 0;
