@@ -93,8 +93,10 @@ int main() {
                 led_off(&led_Green);
                 dc_motor_off(&DC_Motor);
                 lcd_4bit_send_command(&lcd, LCD_CLEAR);
+                /* The user can choose to change their password or not */
                 lcd_4bit_send_string_pos(&lcd , 1, 1, "(1) Change The Pass"); 
                 lcd_4bit_send_string_pos(&lcd , 3, 1, "Any Key To Exit"); 
+                /* wait for the user to decide */
                 while(keypad_newvalue == 0){
                     keypad_newvalue = Keypad_Read_Value();
                     if (keypad_newvalue == '1'){Key = 1;}
