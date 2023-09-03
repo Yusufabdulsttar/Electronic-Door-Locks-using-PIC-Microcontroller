@@ -4,8 +4,7 @@
 - ### The user enters the password on the keypad.
 - ### The microcontroller checks the password against the password stored in EEPROM.
 - ### If the password is incorrect, the red LED will turn on and the LCD will display the message "Password incorrect. You have remaining attempts left".
-- ### If the password is correct, the motor activates and opens the door and The green LED turns on.
-- ### The phrase "Correct Password" appears on the LCD.
+- ### If the password is correct, the motor activates and opens the door and The green LED turns on and the LCD will display the message "Correct Password".
 - ### The user has the option to change the password or not. If the user chooses to change the password, they enter the new password on the keypad.
 - ### The microcontroller stores the new password in EEPROM, which is a type of memory that retains its contents even when the power is turned off. This means that the new password will still be valid even if the electricity turns off.
 - ### If the user exceeds the number of attempts, the LCD will display the message "You have exceeded the number of attempts. Please wait 60 seconds before trying again".
