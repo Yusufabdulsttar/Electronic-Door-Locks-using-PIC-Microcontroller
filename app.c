@@ -45,6 +45,7 @@ int main() {
             eeeprom_Write (0x00,(uint8)New_Password);
             eeeprom_Write (0x01,(uint8)(New_Password>>8));
             eeeprom_Write (0x02,(uint8)(New_Password>>16));
+            New_Password = 0;
             /* Tell The Program We Set A New Password */
             eeeprom_Write (0x04,0x01);
             Numb_Of_Pass2 = 0;
@@ -57,8 +58,7 @@ int main() {
             Key = 0;
             keypad_value = Keypad_Read_Value();
         }
-        else{ /* Nothing */ 
-        }
+        else{ /* Nothing */ }
         /* if key = 0 thats mean we don't need to set a new password*/
         if(('0' <= keypad_value) && ('9' >= keypad_value)&& (Key == 0))
         {
@@ -73,10 +73,11 @@ int main() {
         if(6 == Numb_Of_Pass)
         {
             /* Read The Password From EEPROM  */
+            Stored_Password = 0;
             eeeprom_Read (0x00,&temp0);
             eeeprom_Read (0x01,&temp1);
             eeeprom_Read (0x02,&temp2);
-            Stored_Password = temp0 + temp1*256 + temp2*65536;
+            Stored_Password = (uint8)temp0 | (uint32)temp1<<8 | (uint32)temp2<<16;
             Numb_Of_Pass = 0;
             lcd_output_data_col = 0;
             
