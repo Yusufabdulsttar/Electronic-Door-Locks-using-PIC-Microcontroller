@@ -1,11 +1,11 @@
 /* 
- * File:   key_bad.c
+ * File:   keypad.c
  * Author: yusuf
  *
  * Created on April 24, 2023, 1:11 PM
  */
 
-#include "key_bad.h"
+#include "keypad.h"
 static const uint8 keypad_value [KEYPAD_ROW][KEYPAD_COL] = {
                                               {'7','8','9','/'},
                                               {'4','5','6','*'},
