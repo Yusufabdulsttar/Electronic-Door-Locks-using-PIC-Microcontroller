@@ -9,4 +9,4 @@
 - ### The microcontroller stores the new password in EEPROM, which is a type of memory that retains its contents even when the power is turned off. This means that the new password will still be valid even if the electricity turns off.
 - ### If the user exceeds the number of attempts, the LCD will display the message "You have exceeded the number of attempts. Please wait 60 seconds before trying again".
 
-![Yusuf Abdulsttar](https://github.com/Yusufabdulsttar/Electronic-Door-Locks-using-PIC-Microcontroller/assets/134774623/0c5ee435-849f-401e-8b43-a338620e3b41)
+![Yusuf Abdulsttar](https://github.com/Yusufabdulsttar/Electronic-Door-Locks-using-PIC-Microcontroller/assets/134774623/1134a6fd-2ed5-46c2-b46a-9c26b209b6d6)
