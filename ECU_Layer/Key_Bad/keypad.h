@@ -1,12 +1,12 @@
 /* 
- * File:   key_bad.h
+ * File:   keypad.h
  * Author: yusuf
  *
  * Created on April 24, 2023, 1:11 PM
  */
 
-#ifndef KEY_BAD_H
-#define	KEY_BAD_H
+#ifndef KEYPAD_H
+#define	KEYPAD_H
 
 /* section : Includes   */
 #include "../../MCAL_Layer/GPIO/hal_gpio.h"
@@ -27,5 +27,5 @@ typedef struct {
 Std_ReturnType keypad_initialize (const keypad_t *keypad); 
 Std_ReturnType keypad_read (const keypad_t *keypad , uint8 *key);
 
-#endif	/* KEY_BAD_H */
+#endif	/* KEYPAD_H */
 
