@@ -30,7 +30,6 @@ Std_ReturnType keypad_initialize (const keypad_t *keypad){
     return ret;   
 } 
 
-
 Std_ReturnType keypad_read (const keypad_t *keypad , uint8 *key){
     Std_ReturnType ret = E_OK;
     logic_t key_c = 0;
