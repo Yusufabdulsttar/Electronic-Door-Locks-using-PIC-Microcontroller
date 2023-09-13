@@ -8,7 +8,7 @@
 
 
 int main() {
-    /* For initialization Drivers like (LED - KEYBAD - LCD - DC_Motor) */
+    /* For initialization Drivers like (LED - KEYPAD - LCD - DC_Motor) */
     initialization (); 
     /* check if we set a new password or not*/
     eeeprom_Read (0x04,&valid_pass);
